@@ -1,9 +1,17 @@
-#include <pybind11/embed.h> // everything needed for embedding
-namespace py = pybind11;
+#include <QApplication>
+#include <QMainWindow>
+#include <QLabel>
+#include <QString>
 
-int main() {
-    py::scoped_interpreter guard{}; // start the interpreter and keep it alive
+int main(int argc, char* argv[])
+{
+    QApplication app(argc, argv);
 
-    py::print("Hello, World!"); // use the Python API
+    QMainWindow window;
+    window.setWindowTitle("Mainwindow");
+
+    QLabel label("Hello World!", &window);
+
+    window.show();
+    return app.exec();
 }
-
