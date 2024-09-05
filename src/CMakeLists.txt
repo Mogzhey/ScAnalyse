@@ -1,1 +1,4 @@
-add_executable(ScAnalyse test.cpp)
+add_executable(ScAnalyse
+	"main.cpp"
+	"homescreen.cpp" "homescreen.h"
+)

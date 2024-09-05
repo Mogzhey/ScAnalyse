@@ -8,11 +8,16 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_subdirectory(extern/pybind11 extern/bin)
 
 # include Qt6
-find_package(Qt6 REQUIRED COMPONENTS Widgets)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets)
 qt_standard_project_setup()
 
 # build executable
 add_subdirectory(src bin)
 
 # link against pybind11 and Qt
-target_link_libraries(ScAnalyse PRIVATE pybind11::embed Qt6::Widgets)
+target_link_libraries(ScAnalyse PRIVATE
+	pybind11::embed
+	Qt6::Core
+	Qt6::Gui
+	Qt6::Widgets
+)
