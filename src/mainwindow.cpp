@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "gui/peakfit_view.h"
 
 MainWindow::MainWindow()
 {
@@ -24,20 +25,29 @@ void MainWindow::createMenus()
     // Create menus
     fileMenu = menuBar()->addMenu(tr("File"));
     viewMenu = menuBar()->addMenu(tr("View"));
+    analysisMenu = menuBar()->addMenu(tr("Analysis"));
 
     // Create actions
-    testFileAction1 = new QAction(tr("Test 1"));
+    peakFitAction = new QAction(tr("Fit peaks"));
     testFileAction2 = new QAction(tr("Test 2"));
 
     testViewAction1 = new QAction(tr("Test 1"));
     testViewAction2 = new QAction(tr("Test 2"));
 
     // Add actions to menus
-    fileMenu->addAction(testFileAction1);
+    analysisMenu->addAction(peakFitAction);
     fileMenu->addAction(testFileAction2);
 
     viewMenu->addAction(testViewAction1);
     viewMenu->addAction(testViewAction2);
 
     // TODO: connect slots to menu action signals
+    connect(peakFitAction, &QAction::triggered, this, &MainWindow::showPeakFitView);
+
+}
+
+void MainWindow::showPeakFitView()
+{
+    peakFitView = new PeakFitView();
+    peakFitView->show();
 }
