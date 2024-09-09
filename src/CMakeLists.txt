@@ -5,4 +5,4 @@ add_executable(ScAnalyse
 	"gui/peakfit_view.cpp" "peakfit/peakfit.cpp"
 	"peakfit/peakfit.h" "gui/peakfit_view.h" 
 	"utils/file_loader.cpp" "utils/file_loader.h"
-)
+ "utils/chart_wrapper.cpp" "utils/chart_wrapper.h")

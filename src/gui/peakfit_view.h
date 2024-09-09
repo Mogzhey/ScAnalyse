@@ -1,6 +1,6 @@
 #pragma once
 #include <QWidget>
-#include <QGridLayout>
+#include <QHBoxLayout>
 #include <QFormLayout>
 
 #include <QChartView>
@@ -10,7 +10,9 @@
 
 #include <QLabel>
 #include <QTextEdit>
+#include <QPushButton>
 #include <vector>
+#include "../utils/chart_wrapper.h"
 
 class PeakFitView : public QWidget
 {
@@ -20,26 +22,31 @@ public:
 	PeakFitView(QWidget* parent = nullptr);
 
 private:
-	void setupChart();
-	void updateChart();
-	
-	QWidget* parent;
-	QWidget* container;
-	QWidget* form;
 
-	QGridLayout* container_layout;
+	void onLoadFileClick();
+
+	std::vector<std::pair<std::string, std::vector<float>>> data;
+	std::vector<float> time_col;
+	std::vector<float> peak_col;
+	
+	ChartWrapper* chart;
+	QWidget* parent;
+	QWidget* form;
+	QWidget* menu_container;
+
+	QHBoxLayout* layout;
+	QVBoxLayout* menu_layout;
 	QFormLayout* form_layout;
 
-	QChartView* plot_view;
-	QChart* plot;
-	QLineSeries* series;
-	QValueAxis* value_axes;
-
+	QLabel* import_file_form_title;
 	QLabel* import_file_label;
 	QLabel* label1;
-	QLabel* label2;
+	QLabel* figure_title_label;
 
 	QTextEdit* import_file_text_edit;
-	QTextEdit* text_edit1;
+	QTextEdit* figure_title_text_edit;
 	QTextEdit* text_edit2;
+
+	QPushButton* load_file_button;
+	std::string filename;
 };

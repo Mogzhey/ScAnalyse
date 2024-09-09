@@ -49,5 +49,5 @@ void MainWindow::createMenus()
 void MainWindow::showPeakFitView()
 {
     peakFitView = new PeakFitView();
-    peakFitView->show();
+    peakFitView->showMaximized();
 }

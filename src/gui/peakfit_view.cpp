@@ -1,84 +1,62 @@
 #include "peakfit_view.h"
 #include "../peakfit/peakfit.h"
 #include "../utils/file_loader.h"
+#include "../utils/chart_wrapper.h"
+#include <iostream>
 
-PeakFitView::PeakFitView(QWidget* parent) : QWidget(parent) 
+PeakFitView::PeakFitView(QWidget* parent) : QWidget(parent), parent(parent)
 {
-	this->parent = parent;
-	this->setMinimumSize(1000, 600);
-
 	// create containers and layouts
-	container = new QWidget(this);
-	container_layout = new QGridLayout();
+	layout = new QHBoxLayout();
 
 	form = new QWidget();
-	form->setMaximumHeight(50);
+	form->setMaximumSize(400, 150);
 	form_layout = new QFormLayout();
 
-	// set up plot view
-	plot_view = new QChartView();
-	plot = new QChart();
-	this->setupChart();
+	menu_container = new QWidget();
+	menu_container->setMaximumSize(400, 150);
+	menu_layout = new QVBoxLayout();
 
+	// set up chart view
+	chart = new ChartWrapper();
 
 	// set up fitting controls
-	import_file_label = new QLabel("File path");
-	label1 = new QLabel();
-	label2 = new QLabel();
+	import_file_form_title = new QLabel("Import file to load");
+	import_file_form_title->setFont(QFont("Arial", 16));
+	import_file_form_title->setMaximumHeight(50);
 
-	import_file_text_edit = new QTextEdit();
-	text_edit1 = new QTextEdit();
-	text_edit2 = new QTextEdit();
+	import_file_label = new QLabel("File path");
+	label1 = new QLabel("go!!!");
+	figure_title_label = new QLabel("Figure title");
+
+	import_file_text_edit = new QTextEdit("Am241_GE1_1.CSV");
+	figure_title_text_edit = new QTextEdit("");
+
+	load_file_button = new QPushButton("Load file");
+	connect(load_file_button, &QPushButton::released, this, &PeakFitView::onLoadFileClick);
 
 	// add everything to layout
 	form->setLayout(form_layout);
 	form_layout->addRow(import_file_label, import_file_text_edit);
+	form_layout->addRow(figure_title_label, figure_title_text_edit);
+	form_layout->addRow(label1, load_file_button);
 
-	container->setLayout(container_layout);
-	container_layout->addWidget(plot_view, 0, 1);
-	container_layout->addWidget(form, 0, 0);
+	form->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
+	menu_container->setLayout(menu_layout);
+	menu_layout->addWidget(import_file_form_title);
+	menu_layout->addWidget(form);
 
-	auto data = read_csv("../test_data/Am241_GE1_1.CSV");
+	this->setLayout(layout);
+	layout->addWidget(menu_container, 0, Qt::AlignmentFlag::AlignTop);
+	layout->addWidget(chart);
 }
 
-void PeakFitView::setupChart() {
-	/* 
-	
-	TODO: Make some data loading utillity thing elsewhere and call it here to put it into the figure.
+void PeakFitView::onLoadFileClick() {
+	std::string filename_input = import_file_text_edit->toPlainText().toStdString();
+	filename = "../../test_data/" + filename_input;
 
-	*/
-	// Create chart
-	auto chart = new QChart();
-	chart->setTitle("Test Plot");
-
-	// Create axes
-	auto xAxis = new QValueAxis();
-	xAxis->setTickCount(11);
-	xAxis->setTitleText("x values");
-
-	auto yAxis = new QValueAxis();
-	yAxis->setTickCount(11);
-	yAxis->setTitleText("y values");
-
-	// Create line of y = x^2
-	QLineSeries* series = new QLineSeries();
-	for (float x = -10.0f; x <= 10.0f; x += 0.2f)
-	{
-		series->append(x, x * x);
-	}
-	series->setName("y = x^2");
-
-	// Add line to chart
-	chart->addSeries(series);
-
-	// Add axes to chart
-	chart->setAxisX(xAxis, series);
-	chart->setAxisY(yAxis, series);
-
-	// Add chart to plot
-	this->plot_view->setChart(chart);
-
-	read_csv("../test_data/Am241_GE1_1");
+	chart->Clear();
+	chart->LoadDataAsSeries(filename, figure_title_text_edit->toPlainText());
 }
 

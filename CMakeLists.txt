@@ -7,9 +7,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # inlude pybind
 add_subdirectory(extern/pybind11 extern/bin)
 
-# inlude fast-cpp-csv-parser
-add_subdirectory(extern/fast-cpp-csv-parser extern/bin)
-
 # include Qt6
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets Charts)
 qt_standard_project_setup()
